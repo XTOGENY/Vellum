@@ -1,0 +1,444 @@
+.image-import-dialog {
+  width: min(1080px, calc(var(--app-width) - 64px));
+  height: min(800px, calc(var(--app-height) - 64px));
+  max-height: calc(var(--app-height) - 64px);
+}
+.image-import-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: import-arrive 160ms ease-out;
+}
+.image-import-dialog > header {
+  flex-shrink: 0;
+}
+.image-import-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.83fr) minmax(420px, 1.17fr);
+  min-height: 0;
+  flex: 1;
+}
+.import-image-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  min-width: 0;
+  min-height: 0;
+  background: var(--wash);
+  border-right: 1px solid var(--line);
+  overflow: auto;
+}
+.import-image-frame {
+  min-height: 130px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.import-image-frame img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+.import-file {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  justify-content: space-between;
+}
+.import-file > div {
+  min-width: 0;
+}
+.import-file h3 {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  margin: 0;
+  line-height: 1.7;
+}
+.import-file p {
+  margin: 4px 0 0;
+  font: 12px/1.8 var(--mono);
+  color: var(--muted);
+}
+.import-file > button {
+  flex-shrink: 0;
+  font-size: 13px;
+}
+.import-uses h3 {
+  font: 500 18px/1.4 var(--serif);
+  margin: 0 0 12px;
+}
+.import-use {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 12px;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  transition:
+    background 120ms,
+    color 120ms;
+}
+.import-use:hover {
+  background: var(--white);
+  color: var(--dark);
+}
+.import-use:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.import-use > .ico {
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+}
+.import-use > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.import-use b {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+.import-use small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+.import-reference-uses {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.import-reference-uses .import-use {
+  gap: 8px;
+  padding: 11px 10px;
+}
+.import-reference-uses .import-use small {
+  font-size: 12px;
+}
+.import-reference-uses .import-use > span:last-child {
+  display: none;
+}
+.import-metadata-side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.import-metadata-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 24px;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.import-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.import-kicker {
+  color: var(--muted);
+  font-size: 12px;
+}
+.import-section-heading h3 {
+  font: 500 24px/1.5 var(--serif);
+  margin: 5px 0 0;
+}
+.import-section-heading .tag {
+  white-space: nowrap;
+}
+.import-intro {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 9px 0 20px;
+}
+.import-source-tabs {
+  display: flex;
+  position: relative;
+  border: 1px solid var(--line);
+  padding: 3px;
+  background: var(--wash);
+  margin-bottom: 18px;
+  isolation: isolate;
+}
+.import-source-tabs button {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 7px;
+  font-size: 13px;
+  z-index: 1;
+}
+.import-tab-indicator {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  left: 3px;
+  top: 3px;
+  bottom: 3px;
+  width: calc(50% - 3px);
+  transition: transform 150ms ease-out;
+}
+.import-tab-indicator.is-actual {
+  transform: translateX(100%);
+}
+.import-settings-list {
+  border-top: 1px solid var(--line);
+}
+.import-setting {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+}
+.import-check-row {
+  padding-right: 66px;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.import-check {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--muted);
+  background: var(--white);
+  flex-shrink: 0;
+  margin: 2px 0 0;
+  position: relative;
+  cursor: pointer;
+}
+.import-check:checked {
+  background: var(--green);
+  border-color: var(--green);
+}
+.import-check:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.import-check:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.import-check-row > span {
+  min-width: 0;
+  flex: 1;
+}
+.import-check-row b {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+.import-check-row small {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.import-field-detail {
+  margin: 0 0 0 29px;
+}
+.import-field-detail summary {
+  position: absolute;
+  right: 0;
+  top: 17px;
+  cursor: pointer;
+  color: var(--green);
+  font-size: 12px;
+  width: fit-content;
+}
+.import-prompt {
+  margin: 12px 0 0;
+  padding: 12px;
+  font: 13px/1.85 var(--mono);
+  border: 1px solid var(--line);
+  background: var(--white);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.import-characters > div {
+  border-bottom: 1px solid var(--fine);
+  padding: 12px 0;
+}
+.import-characters b {
+  font-size: 13px;
+}
+.import-characters p {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  margin: 5px 0;
+}
+.import-characters small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.import-sub-option {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  padding: 12px 0 12px 29px;
+  border-bottom: 1px solid var(--line);
+}
+.import-parameter-list {
+  margin: 10px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 18px;
+}
+.import-parameter-list dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+.import-parameter-list dd {
+  margin: 4px 0 0;
+  font: 13px/1.6 var(--mono);
+  overflow-wrap: anywhere;
+}
+.import-append-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  font-size: 13px;
+  margin-top: 18px;
+}
+.import-append-option small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+.import-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin: 16px 0 0;
+}
+.import-note .ico {
+  flex-shrink: 0;
+  margin-top: 4px;
+  width: 15px;
+  height: 15px;
+}
+.import-footer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  padding: 12px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.import-footer .actions {
+  justify-content: flex-end;
+}
+.import-footer-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.import-footer-summary b {
+  font-weight: 500;
+  color: var(--ink);
+}
+.import-footer .library-error {
+  margin: 0;
+  font-size: 13px;
+}
+.import-no-metadata {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 20px 8px;
+}
+.import-no-metadata > .ico {
+  width: 30px;
+  height: 30px;
+  color: var(--muted);
+}
+.import-no-metadata h3 {
+  font: 500 24px/1.5 var(--serif);
+  margin: 0;
+}
+.import-no-metadata p {
+  font-size: 14px;
+  line-height: 1.9;
+  margin: 0;
+  max-width: 34ch;
+}
+.import-no-metadata .import-note {
+  margin: 0;
+}
+@keyframes import-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-height: 800px) {
+  .import-image-side,
+  .import-metadata-scroll {
+    padding: 20px;
+  }
+  .import-image-side {
+    gap: 12px;
+  }
+  .import-setting {
+    padding: 9px 0;
+  }
+  .import-field-detail summary {
+    top: 12px;
+  }
+  .import-source-tabs {
+    margin-bottom: 12px;
+  }
+  .import-intro {
+    margin-bottom: 16px;
+  }
+  .import-uses h3 {
+    margin-bottom: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .image-import-dialog[open] {
+    animation: none;
+  }
+  .import-tab-indicator,
+  .import-use {
+    transition: none;
+  }
+}

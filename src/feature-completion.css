@@ -1,0 +1,295 @@
+/* New tools retain the paper palette and attach to the existing work areas. */
+.cm-prompt.prompt-input {
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--white, #fffdf6);
+  min-width: 0;
+  cursor: text;
+  overflow: hidden;
+}
+.cm-prompt .cm-editor {
+  height: 100%;
+}
+.cm-prompt .cm-scroller {
+  font: inherit;
+  line-height: inherit;
+  overflow: auto;
+  padding: 10px;
+}
+.cm-prompt .cm-content {
+  padding: 0;
+  min-height: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.cm-prompt .cm-line {
+  padding: 0;
+}
+.cm-prompt .cm-focused {
+  outline: none;
+}
+.cm-prompt:focus-within {
+  border-color: #52643a;
+}
+.cm-prompt .cm-cursor {
+  border-left-color: #52643a;
+}
+.prompt-inline-chunk {
+  display: inline-block;
+  vertical-align: baseline;
+  padding: 0 5px;
+  margin: 0 2px;
+  background: #e1e8d2;
+  border: 1px solid #a5b28c;
+  border-radius: 3px;
+  color: #3a4d2b;
+  line-height: 1.5;
+  font: inherit;
+  cursor: grab;
+}
+.prompt-inline-chunk.missing {
+  border-color: #ad4b31;
+  color: #9e462e;
+}
+.cm-tooltip {
+  z-index: 200 !important;
+  font: 12px/1.6 var(--mono);
+  border: 1px solid var(--line) !important;
+  background: #faf8ef !important;
+}
+.cm-tooltip-autocomplete ul li[aria-selected="true"] {
+  background: #e2e8d5 !important;
+  color: #28391f !important;
+}
+.cm-tooltip-autocomplete {
+  max-width: 360px;
+}
+.token-overflow {
+  color: #a64b2f;
+}
+.detail-section > .toggle-row + h3 {
+  margin-top: 16px;
+}
+.quality-preset {
+  margin: 8px 0 16px;
+}
+.ported-editor {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+.ported-editor .editor-tools > .select-trigger {
+  width: 110px;
+  max-width: 130px;
+  flex: 0 0 110px;
+  min-height: 30px;
+  padding: 4px 7px;
+  font-size: 11px;
+}
+.ported-options {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ported-options > .slider-field {
+  flex: 1 1 130px;
+  max-width: 210px;
+  margin: 0;
+}
+.ported-options > .select-trigger {
+  max-width: 95px;
+  width: 95px;
+}
+.ported-options > .toggle {
+  font-size: 11px;
+}
+.ported-options .slider-limits {
+  display: none;
+}
+.ported-options .slider-field input[type="number"] {
+  height: 23px;
+  min-height: 23px;
+  width: 50px;
+}
+.ported-options .slider-field > label {
+  font-size: 10px;
+}
+.ported-editor .ported-options {
+  align-items: center;
+}
+.ported-editor .editor-tools {
+  gap: 4px;
+}
+.ported-options input[type="color"] {
+  width: 32px;
+  height: 28px;
+  padding: 2px;
+}
+.ported-editor > .slider-field {
+  margin: 4px 10px;
+}
+.editor-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px;
+  padding: 10px;
+  background: #f0f1e3;
+  border-bottom: 1px solid var(--line);
+  max-height: 180px;
+  overflow: auto;
+  flex-shrink: 0;
+}
+.editor-inline > .field {
+  flex: 1 1 80px;
+  min-width: 70px;
+  margin: 0;
+}
+.editor-inline > .slider-field {
+  flex: 1 1 130px;
+  margin: 0;
+}
+.editor-inline > .select-shell {
+  min-width: 100px;
+}
+.ported-canvas-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 100px;
+  overflow: hidden;
+}
+.ported-canvas-stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  background-color: #e8e7db;
+  background-image:
+    linear-gradient(45deg, #d4d7c766 25%, transparent 25%),
+    linear-gradient(-45deg, #d4d7c766 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d4d7c766 75%),
+    linear-gradient(-45deg, transparent 75%, #d4d7c766 75%);
+  background-size: 20px 20px;
+  background-position:
+    0 0,
+    0 10px,
+    10px -10px,
+    -10px 0;
+}
+.ported-canvas-stack {
+  position: relative;
+  flex: none;
+  transform-origin: center;
+  line-height: 0;
+}
+.ported-canvas-stack canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+.ported-selection {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.ported-layers {
+  width: 115px;
+  overflow: auto;
+  border-left: 1px solid var(--line);
+  background: #f6f4e9;
+  padding: 6px;
+}
+.ported-layer {
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  font-size: 10px;
+}
+.ported-layer > button {
+  display: block;
+  width: 100%;
+  padding: 4px;
+}
+.ported-layer img {
+  width: 100%;
+  height: 45px;
+  object-fit: contain;
+  background: #e5e7d8;
+}
+.ported-layer [aria-pressed="true"] {
+  background: #dce6ca;
+}
+.ported-layer > div {
+  display: flex;
+  justify-content: space-around;
+}
+.ported-layer > div button {
+  padding: 3px;
+}
+.generation-quote {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 7px 12px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.quote-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.quote-row b {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.generation-quote .text-link {
+  font-size: 12px;
+  white-space: nowrap;
+}
+.quote-hint,
+.quote-error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.quote-hint {
+  color: var(--muted);
+}
+.quote-error {
+  color: var(--red);
+}
+.ported-editor .canvas-foot {
+  flex-wrap: wrap;
+}
+.ported-editor .canvas-foot .btn {
+  min-height: 30px;
+  font-size: 11px;
+}
+@media (max-height: 800px) {
+  .ported-editor .editor-tools {
+    padding: 6px;
+  }
+  .ported-options {
+    padding: 6px;
+  }
+  .editor-inline {
+    max-height: 125px;
+  }
+  .prompt-rich.is-long .prompt-input {
+    min-height: 260px;
+  }
+}

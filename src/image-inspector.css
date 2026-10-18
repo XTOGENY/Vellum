@@ -1,0 +1,337 @@
+.image-inspector main {
+  max-width: 1440px;
+  margin: auto;
+  padding: 27px 32px 24px;
+  height: calc(var(--app-height) - 66px);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.image-inspector .heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.image-inspector .heading p {
+  color: var(--muted);
+  margin-top: 5px;
+}
+.image-inspector .btn {
+  padding: 8px 17px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 2px;
+  transition:
+    background 0.16s,
+    transform 0.12s;
+}
+.image-inspector .btn:hover {
+  background: var(--wash);
+}
+.image-inspector .btn:active {
+  transform: translateY(1px);
+}
+.image-inspector .primary {
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
+}
+.image-inspector .primary:hover {
+  background: var(--dark);
+}
+.image-inspector .layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(330px, 0.86fr) minmax(530px, 1.3fr);
+  gap: 24px;
+}
+.image-inspector .source,
+.image-inspector .result {
+  min-height: 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+}
+.image-inspector .source-head,
+.image-inspector .result-head {
+  padding: 17px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.image-inspector .source-head span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.image-inspector .image {
+  flex: 1;
+  min-height: 0;
+  padding: 20px;
+  background: #e7e5d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image-inspector .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.image-inspector .file {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+.image-inspector .file p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.image-inspector .good {
+  font-size: 13px;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.image-inspector .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+}
+.image-inspector .tabs {
+  display: flex;
+  gap: 24px;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--line);
+}
+.image-inspector .tabs button {
+  padding: 13px 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+}
+.image-inspector .tabs button[aria-selected="true"] {
+  border-color: var(--green);
+  color: var(--ink);
+}
+.image-inspector .body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 22px;
+}
+.image-inspector .section {
+  margin-bottom: 23px;
+}
+.image-inspector .section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+.image-inspector .section-head h3 {
+  font-size: 14px;
+}
+.image-inspector .text-btn {
+  color: var(--green);
+  font-size: 13px;
+  padding: 2px 0;
+}
+.image-inspector .prompt {
+  line-height: 1.95;
+  font-family: var(--mono);
+  font-size: 14px;
+  background: var(--white);
+  border: 1px solid var(--fine);
+  padding: 14px 16px;
+}
+.image-inspector .negative {
+  color: #5d604f;
+}
+.image-inspector .params {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--fine);
+}
+.image-inspector .params div {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--fine);
+  display: flex;
+  gap: 15px;
+}
+.image-inspector .params span {
+  color: var(--muted);
+  width: 65px;
+}
+.image-inspector .params b {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.image-inspector .note {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.image-inspector .bottom {
+  border-top: 1px solid var(--line);
+  padding: 16px 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.image-inspector .bottom .note {
+  margin-right: auto;
+}
+.image-inspector .blank {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  text-align: center;
+  padding: 35px;
+}
+.image-inspector .blank h2 {
+  font-size: 24px;
+}
+.image-inspector .blank p {
+  color: var(--muted);
+  max-width: 360px;
+}
+.image-inspector .upload-mark {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+  stroke: var(--green);
+  fill: none;
+  stroke-width: 1.1;
+}
+.image-inspector .state-links {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+}
+.image-inspector .state-links a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.image-inspector .state-links a:hover {
+  text-decoration: underline;
+}
+.image-inspector [hidden] {
+  display: none !important;
+}
+.image-inspector .pane {
+  animation: inspector-appear 0.18s ease-out;
+}
+.image-inspector .hint {
+  padding: 11px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.image-inspector .raw {
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.9;
+}
+.image-inspector .toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--white);
+  padding: 10px 22px;
+  animation: inspector-appear 0.18s;
+}
+.image-inspector main {
+  animation: inspector-appear 0.22s;
+}
+@keyframes inspector-appear {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .image-inspector * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media (max-height: 780px) {
+  .image-inspector main {
+    padding-top: 18px;
+    gap: 15px;
+  }
+  .image-inspector .body {
+    padding: 16px 20px;
+  }
+  .image-inspector .section {
+    margin-bottom: 15px;
+  }
+  .image-inspector .prompt {
+    padding: 10px 13px;
+  }
+}
+
+.image-inspector main {
+  height: calc(var(--app-height) - 100px);
+  font-size: 14px;
+}
+.image-inspector .empty-source {
+  flex: 1;
+}
+.image-inspector .prompt {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.image-inspector .file b {
+  overflow-wrap: anywhere;
+}
+.image-inspector .file {
+  flex-shrink: 0;
+}
+.image-inspector .bottom,
+.image-inspector .tabs,
+.image-inspector .source-head,
+.image-inspector .result-head {
+  flex-shrink: 0;
+}
+.image-inspector .inspector-error {
+  color: var(--red);
+}
+.image-inspector .settings-title {
+  margin-bottom: 15px;
+}
+.image-inspector .warning {
+  margin-top: 22px;
+}
+.image-inspector form {
+  padding: 20px;
+}
+.image-inspector .params b {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.image-inspector .params span {
+  flex-shrink: 0;
+}
+.image-inspector .raw {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.image-inspector .toast {
+  z-index: 20;
+}

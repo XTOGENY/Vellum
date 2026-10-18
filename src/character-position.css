@@ -1,0 +1,268 @@
+/* 中央角色定位画布：盖住工作区但不卸载作品，退出即恢复 */
+.image-workspace {
+  position: relative;
+}
+
+.position-mode {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f4f4e7;
+  padding: 10px 14px 12px;
+}
+
+.position-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.position-mode-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #52643a;
+  border: 1px solid var(--line);
+  background: #eef0e0;
+  padding: 3px 8px;
+}
+
+/* 编号只占一行，多了横向滚动，不折行 */
+.position-chips {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.position-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  max-width: 168px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  font-size: 12px;
+}
+
+.position-chip b {
+  font: 10px var(--mono);
+  color: var(--muted);
+}
+
+.position-chip span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.position-chip.active {
+  border-color: #8b9d71;
+  background: #e8eedb;
+}
+
+.position-chip.inactive {
+  opacity: 0.5;
+}
+
+/* 画布按输出画幅比例适配可用空间，不拉伸 */
+.position-stage-wrap {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+
+.position-stage {
+  position: relative;
+  height: 100%;
+  max-height: 100%;
+  aspect-ratio: var(--position-ratio);
+  max-width: 100%;
+  border: 1px solid #b8c3a2;
+  background: #fbfbf2;
+  touch-action: none;
+}
+
+/* 整格是可点按钮：悬停填充，选中格描边 */
+.position-cell {
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #dfe3cf;
+  background: transparent;
+  cursor: crosshair;
+  padding: 0;
+}
+
+.position-cell:hover {
+  background: #eef0e0;
+  border-color: #b8c3a2;
+}
+
+.position-cell.occupied {
+  background: #f2f4e4;
+}
+
+.position-cell.active {
+  background: #e3e8d3;
+  border-color: #8b9d71;
+  box-shadow: inset 0 0 0 1px #8b9d71;
+}
+
+.position-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 34px;
+  height: 34px;
+  padding: 0 7px;
+  border: 1px solid #8b9d71;
+  border-radius: 999px;
+  background: var(--white);
+  font: 12px var(--mono);
+  color: #2f3a24;
+  cursor: grab;
+  z-index: 2;
+  touch-action: none;
+}
+
+.position-pin.active {
+  background: #52643a;
+  color: #f6f2e4;
+  border-color: #3f4d2c;
+}
+
+.position-pin.inactive {
+  border-style: dashed;
+  opacity: 0.75;
+}
+
+.position-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.position-hint {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.position-advanced summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.position-advanced[open] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.position-coords {
+  display: flex;
+  gap: 8px;
+  margin: 0 4px;
+}
+
+.position-coords label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.position-coords input {
+  width: 64px;
+  min-height: 26px;
+  padding: 3px 6px;
+  font: 11px var(--mono);
+}
+
+.position-done {
+  flex-shrink: 0;
+}
+
+/* 小标签：抽屉里的区块标题统一用这个，不再和角色名争层级 */
+.role-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.role-position-now {
+  font-size: 11px;
+  color: #52643a;
+  border: 1px solid var(--line);
+  background: #f4f5e9;
+  padding: 2px 8px;
+}
+
+/* 抽屉里的位置区块：标签页合并后就在这里 */
+.role-position-block {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.role-position-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.role-position-head .role-label {
+  margin-bottom: 0;
+}
+
+.role-position-head .note {
+  margin: 0;
+}
+
+.role-canvas-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* 和「涂鸦 / 绘制蒙版」同一排版：整宽、图标 + 文案、够高 */
+.role-canvas-entry > .btn {
+  width: 100%;
+  min-height: 40px;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 10px;
+  font-size: 12px;
+}
+
+.role-canvas-hint {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.role-canvas-entry .note {
+  margin: 0;
+}
