@@ -1,5 +1,5 @@
 // Reimplemented from reviewed request-building ideas in the original NovelAI project.
-// Wire fields verified against docs/official/image-api.json. No old UI/state copied.
+// Wire fields verified against the public NovelAI image API specification. No old UI/state copied.
 import { expandedPrompts, splitCharacterPrompts } from "./prompt-tools.mjs";
 import { composeTemplates } from "./prompt-composition.mjs";
 const samplers = [

@@ -19,6 +19,17 @@ __pycache__/
 *.pem
 *.key
 
+# Private references, exports and local scratch files
+ai-artist-tool/
+design/
+.curate-cache.json
+%SystemDrive%/
+shots/
+*.bak
+*.backup
+*.tmp
+covers/
+
 # Private tooling and agent records
 .agents/
 .codex/
