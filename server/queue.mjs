@@ -27,7 +27,7 @@ import {
   prepareReferences,
   prepareDirector,
   picture,
-  addMetadata,
+  encodeSavedImage,
   normalizeImage,
   prepareFocus,
   readMetadata,
@@ -374,6 +374,7 @@ export class TaskQueue {
         const image = t.operation.image;
         let sourceParams = t.params;
         try { sourceParams = restoreMetadata(await readMetadata(image))?.params || sourceParams; } catch {}
+        sourceParams = { ...sourceParams, localSaveFormat: t.params.localSaveFormat };
         t.phase = "requesting";
         requestedAt = Date.now();
         t.timings.prepareMs = requestedAt - Date.parse(t.startedAt);
@@ -432,7 +433,8 @@ export class TaskQueue {
       this.store.state.connections.find((c) => c.id === t?.connectionId),
     ).id;
     const foreignResult = protocol !== "novelai-native";
-    const png = addMetadata(
+    const format = !foreignResult && params.localSaveFormat === "webp" ? "webp" : "png";
+    const output = await encodeSavedImage(
       clean,
       foreignResult
         ? openAIGenerationMetadata(params, payload, {
@@ -446,9 +448,10 @@ export class TaskQueue {
             kind: t.kind,
             operation: t.operation,
           }),
+      format,
     );
-    const filename = id + ".png";
-    await writeFile(path.join(this.store.imagesDir, filename), png);
+    const filename = id + "." + format;
+    await writeFile(path.join(this.store.imagesDir, filename), output);
     // 网格用 480px WebP，避免每张卡片都下载几 MB 原图；失败也不影响原图保存。
     try {
       const thumb = await picture(clean)
@@ -479,7 +482,7 @@ export class TaskQueue {
       seed: params.seed ?? null,
       params: structuredClone(params),
       collections: [],
-      hash: createHash("sha256").update(png).digest("hex"),
+      hash: createHash("sha256").update(output).digest("hex"),
     };
     item.searchText = historySearchText(
       item,

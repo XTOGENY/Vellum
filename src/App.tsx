@@ -299,6 +299,8 @@ export default function App() {
     positive: number;
     negative: number;
   } | null>(null);
+  const [tokenError, setTokenError] = useState("");
+  const [tokenRetry, setTokenRetry] = useState(0);
   const counter = useRef<Worker | null>(null),
     counterId = useRef(0);
   const [visitedPages, setVisitedPages] = useState<Record<string, boolean>>({});
@@ -668,21 +670,27 @@ export default function App() {
     });
     counter.current = w;
     w.onmessage = ({ data }) => {
-      if (data.id === counterId.current)
+      if (data.id === counterId.current) {
+        setTokenError(data.error ? "Token 计数暂不可用" : "");
         setTokenCount(
           data.error
             ? null
             : { positive: data.positive, negative: data.negative },
         );
+      }
     };
+    w.onerror = () => { setTokenCount(null); setTokenError("Token 计数暂不可用"); };
     return () => {
       counter.current = null;
       w.terminate();
     };
-  }, []);
+  }, [tokenRetry]);
   useEffect(() => {
     if (!loaded) return;
+    const requestId = ++counterId.current;
     setTokenCount(null);
+    setTokenError("");
+    if (!p.model.startsWith("nai-diffusion-")) return;
     const timer = setTimeout(() => {
       let text;
       try {
@@ -692,7 +700,7 @@ export default function App() {
       }
       const expanded = expandedPrompts(p);
       counter.current?.postMessage({
-        id: ++counterId.current,
+        id: requestId,
         model: p.model,
         positive: [
           text.input,
@@ -720,6 +728,14 @@ export default function App() {
     p.dataset,
     p.autoText,
     p.promptChunks,
+    p.templates,
+    p.templateEnabled,
+    p.templatePosition,
+    p.artists,
+    p.artistEnabled,
+    p.artistPosition,
+    p.artistFormat,
+    tokenRetry,
     loaded,
   ]);
   function applyResolution(
@@ -880,7 +896,7 @@ export default function App() {
         if (gptIssue) throw new Error(gptIssue);
       } else validateParams(p);
       followGeneration();
-      await api("/tasks", { connectionId, params: p, kind: "generate" });
+      await api("/tasks", { connectionId, params: { ...p, localSaveFormat: loadPrefs().novelaiSaveFormat }, kind: "generate" });
       setNotice("任务已加入队列。");
     } catch (e: any) {
       fail(e.message);
@@ -989,7 +1005,7 @@ export default function App() {
       await api("/tasks", {
         connectionId,
         kind,
-        params: p,
+        params: { ...p, localSaveFormat: loadPrefs().novelaiSaveFormat },
         operation: {
           ...director,
           image: selected
@@ -1113,8 +1129,9 @@ export default function App() {
         >
           {tokenCount
             ? `≈ ${promptTab === "prompt" ? tokenCount.positive : tokenCount.negative} / ${model.context} Tokens`
-            : `${p[promptTab].length.toLocaleString()} 字符`}
+            : tokenError ? `${tokenError} · ${p[promptTab].length.toLocaleString()} 字符` : "正在计算 Tokens…"}
         </span>
+        {tokenError && <button type="button" className="text-link" onClick={() => setTokenRetry(n => n + 1)}>重试计数</button>}
       </div>
     </>
   );
@@ -2640,7 +2657,7 @@ export default function App() {
                         <a
                           className="btn small download-action"
                           href={selected.url}
-                          download={`Vellum-${selected.id}.png`}
+                          download={`Vellum-${selected.filename}`}
                         >
                           <Icon name="download" />
                           下载

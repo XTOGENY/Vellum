@@ -111,10 +111,31 @@ export function addMetadata(png, fields) {
     ...chunks,
   ]);
 }
+export async function encodeSavedImage(clean, fields, format = "png") {
+  if (format !== "webp") return addMetadata(clean, fields);
+  const serialized = Object.fromEntries(Object.entries(fields).map(([key, value]) => [key, typeof value === "string" ? value : JSON.stringify(value)]));
+  const payload = Buffer.from(JSON.stringify(serialized)).toString("base64");
+  const xmp = `<x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:vellum="https://github.com/XTOGENY/Vellum/metadata/1/" vellum:fields="${payload}" /></rdf:RDF></x:xmpmeta>`;
+  return picture(clean).webp({ lossless: true }).withXmp(xmp).toBuffer();
+}
+
 export async function readMetadata(data) {
   const b = imageBytes(data),
     meta = await picture(b).metadata(),
     fields = {};
+  if (meta.format === "webp" && meta.xmp && meta.xmp.length <= MAX_METADATA) {
+    const encoded = meta.xmp.toString("utf8").match(/vellum:fields="([A-Za-z0-9+/=]+)"/)?.[1];
+    if (encoded) {
+      try {
+        const saved = JSON.parse(Buffer.from(encoded, "base64").toString("utf8"));
+        if (saved && typeof saved === "object" && !Array.isArray(saved)) {
+          for (const key of ["Vellum", "NWENAI", "Comment", "Description", "Software", "Source"]) {
+            if (typeof saved[key] === "string") fields[key] = saved[key];
+          }
+        }
+      } catch {}
+    }
+  }
   if (meta.format === "png") {
     let pos = 8;
     while (pos + 12 <= b.length) {

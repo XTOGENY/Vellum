@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 // 通用设置的本地偏好：只存在这台电脑的浏览器里，不进 .local 数据。
 export type Prefs = {
   uiScale: number;
@@ -5,6 +6,8 @@ export type Prefs = {
   soundOnDone: boolean;
   notifyOnDone: boolean;
   followOnDone: boolean;
+  novelaiTagAutocomplete: boolean;
+  novelaiSaveFormat: "png" | "webp";
 };
 
 export const DEFAULT_PREFS: Prefs = {
@@ -14,6 +17,8 @@ export const DEFAULT_PREFS: Prefs = {
   soundOnDone: false,
   notifyOnDone: false,
   followOnDone: true,
+  novelaiTagAutocomplete: true,
+  novelaiSaveFormat: "png",
 };
 
 const KEY = "nwenai.prefs";
@@ -23,7 +28,11 @@ export function loadPrefs(): Prefs {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return { ...DEFAULT_PREFS };
     const parsed = JSON.parse(raw);
-    return { ...DEFAULT_PREFS, ...parsed };
+    return {
+      ...DEFAULT_PREFS, ...parsed,
+      novelaiTagAutocomplete: parsed.novelaiTagAutocomplete !== false,
+      novelaiSaveFormat: parsed.novelaiSaveFormat === "webp" ? "webp" : "png",
+    };
   } catch {
     return { ...DEFAULT_PREFS };
   }
@@ -32,7 +41,24 @@ export function loadPrefs(): Prefs {
 export function savePrefs(prefs: Prefs) {
   try {
     window.localStorage.setItem(KEY, JSON.stringify(prefs));
-  } catch {}
+    window.dispatchEvent(new Event("vellum-prefs-change"));
+    return true;
+  } catch { return false; }
+}
+
+export function usePrefs() {
+  const [prefs, setPrefs] = useState(loadPrefs);
+  useEffect(() => {
+    const refresh = () => setPrefs(loadPrefs());
+    const storage = (e: StorageEvent) => { if (e.key === KEY || e.key === null) refresh(); };
+    window.addEventListener("vellum-prefs-change", refresh);
+    window.addEventListener("storage", storage);
+    return () => {
+      window.removeEventListener("vellum-prefs-change", refresh);
+      window.removeEventListener("storage", storage);
+    };
+  }, []);
+  return prefs;
 }
 
 // 整页缩放：Chromium 支持 zoom，比逐个改字号安全。

@@ -88,6 +88,7 @@ export function isChatConnection(c: Connection) {
   return usesOf(c).includes("chat");
 }
 export type HistoryItem = {
+  filename: string;
   id: string;
   url: string;
   createdAt: string;

@@ -982,6 +982,23 @@
 .settings-stack .workspace-sheet {
   max-width: none;
 }
+.novelai-settings .check-row { padding: 14px 18px; }
+.novelai-format-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid var(--line);
+  padding: 14px 18px;
+}
+.novelai-format-row label { font-size: 13px; font-weight: 500; }
+.novelai-format-row > div { flex: 1; min-width: 0; }
+.novelai-format-row p { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 5px 0 0; }
+.novelai-format-row .select-trigger { flex: 0 0 220px; width: 220px; max-width: 100%; }
+@media (max-width: 760px) {
+  .novelai-format-row { align-items: stretch; flex-direction: column; gap: 10px; }
+  .novelai-format-row .select-trigger { flex: none; width: 100%; }
+}
 /* 两张设置页共用同一张卡片：轻标题、紧内边距、卡片之间留缝 */
 
 .workspace-sheet > header {

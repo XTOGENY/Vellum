@@ -426,10 +426,10 @@ export default function ArtworkDetails({
             <a
               className="btn"
               href={item.url}
-              download={`Vellum-${item.id}.png`}
+              download={`Vellum-${item.filename}`}
             >
               <Icon name="download" />
-              下载 PNG
+              下载 {item.filename.endsWith(".webp") ? "WebP" : "PNG"}
             </a>
           </footer>
         </section>

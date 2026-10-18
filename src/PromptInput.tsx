@@ -13,7 +13,8 @@ import {
 } from "@codemirror/view";
 import type { DecorationSet } from "@codemirror/view";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
-import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
+import { autocompletion, completionKeymap, closeCompletion } from "@codemirror/autocomplete";
+import { usePrefs } from "./prefs";
 import { highlightPrompt } from "./ported/prompt-highlight";
 import { expandPromptChunks } from "../shared/prompt-tools.mjs";
 import { api } from "./api";
@@ -31,6 +32,9 @@ type Props = Omit<
 };
 const external = Annotation.define<boolean>();
 export default function PromptInput(props: Props) {
+  const { novelaiTagAutocomplete } = usePrefs();
+  const autocompleteEnabled = useRef(novelaiTagAutocomplete);
+  autocompleteEnabled.current = novelaiTagAutocomplete;
   const host = useRef<HTMLDivElement>(null),
     view = useRef<EditorView>(),
     latest = useRef(props),
@@ -182,6 +186,7 @@ export default function PromptInput(props: Props) {
           async (context) => {
             const word = context.matchBefore(/[^,\n!|]{2,}$/);
             if (
+              !autocompleteEnabled.current || !latest.current.model.startsWith("nai-diffusion-") ||
               !word ||
               !latest.current.connectionId ||
               word.text.includes("::")
@@ -197,7 +202,7 @@ export default function PromptInput(props: Props) {
                       prompt: word.text.trim(),
                     }),
                 );
-              if (context.aborted) return null;
+              if (context.aborted || !autocompleteEnabled.current) return null;
               const rows = normalizeTags(r);
               return {
                 from: word.from,
@@ -212,7 +217,7 @@ export default function PromptInput(props: Props) {
             }
           },
         ],
-        activateOnTyping: true,
+        activateOnTyping: novelaiTagAutocomplete,
       }),
     ];
   }
@@ -327,10 +332,12 @@ export default function PromptInput(props: Props) {
       });
   }, [props.value]);
   useLayoutEffect(() => {
+    if (!novelaiTagAutocomplete && view.current) closeCompletion(view.current);
     view.current?.dispatch({
       effects: config.current.reconfigure(extensions()),
     });
   }, [
+    novelaiTagAutocomplete,
     props.chunks,
     props.disabled,
     props.connectionId,

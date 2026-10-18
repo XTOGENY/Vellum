@@ -5,6 +5,7 @@ import { Connections } from "./Management";
 import { AssistantConnections } from "./AssistantConnections";
 import { LibraryFrame, RailButton } from "./LibraryUI";
 import { Button, Icon } from "./ui";
+import { Select } from "./Select";
 import { isChatConnection, isImageConnection } from "./types";
 import type { AssistantSettings, Connection } from "./types";
 function formatSize(bytes: number) {
@@ -124,9 +125,12 @@ export default function Settings({
     }
   }
   function updatePrefs(next: Partial<typeof prefs>) {
-    const merged = { ...prefs, ...next };
+    const merged = { ...loadPrefs(), ...next };
+    if (!savePrefs(merged)) {
+      onError("偏好保存失败，请检查浏览器是否允许本地存储后重试。");
+      return;
+    }
     setPrefs(merged);
-    savePrefs(merged);
     if (next.uiScale !== undefined) applyUiScale(next.uiScale);
   }
   const chatConn = items.find(isChatConnection);
@@ -222,9 +226,24 @@ export default function Settings({
         <header className="library-heading">
           <div>
             <h2>通用</h2>
-            <p>界面、启动方式和完成提醒。这些偏好只保存在这台电脑上。</p>
+            <p>界面、NovelAI 和完成提醒。偏好保存在当前浏览器中。</p>
           </div>
         </header>
+        <section className="workspace-sheet novelai-settings">
+          <header><h3>NovelAI</h3><span className="workspace-status">提示词与图片</span></header>
+          <label className="check-row">
+            <input type="checkbox" checked={prefs.novelaiTagAutocomplete}
+              onChange={(e) => updatePrefs({ novelaiTagAutocomplete: e.target.checked })} />
+            <span><b>自动补全 Tag</b><small>输入时显示标签建议，适用于正面词、负面词和角色提示词。</small></span>
+          </label>
+          <div className="novelai-format-row">
+            <div><label htmlFor="novelai-save-format">图片保存格式</label><p>用于之后生成的 NovelAI 作品；保留提示词与参数。</p></div>
+            <Select id="novelai-save-format" aria-label="NovelAI 图片保存格式" value={prefs.novelaiSaveFormat}
+              onChange={(e) => updatePrefs({ novelaiSaveFormat: e.target.value === "webp" ? "webp" : "png" })}>
+              <option value="png">PNG · 通用兼容</option><option value="webp">WebP · 无损压缩</option>
+            </Select>
+          </div>
+        </section>
         <section className="workspace-sheet">
           <header>
             <h3>界面缩放</h3>

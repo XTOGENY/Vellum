@@ -647,7 +647,7 @@ export async function createApp({
           ) {
             try {
               source = await readFile(
-                path.join(store.imagesDir, item.id + ".png"),
+                path.join(store.imagesDir, store.state.history.find((h) => h.id === item.id)?.filename || item.id + ".png"),
               );
             } catch {
               source = null;
@@ -667,7 +667,7 @@ export async function createApp({
                     .jpeg({ quality: 85 })
                     .toBuffer(),
                 }
-              : { mediaType: "image/png", data: source },
+              : { mediaType: (await sharp(source).metadata()).format === "webp" ? "image/webp" : "image/png", data: source },
           );
         }
       }
@@ -913,7 +913,7 @@ export async function createApp({
       if (action === "delete") {
         // 连本地文件一起删，避免留下孤儿 png / 缩略图。
         for (const h of items) {
-          if (/^[a-f0-9-]{36}\.png$/.test(h.filename))
+          if (/^[a-f0-9-]{36}\.(png|webp)$/.test(h.filename))
             await unlink(path.join(store.imagesDir, h.filename)).catch(
               () => {},
             );
@@ -972,13 +972,13 @@ export async function createApp({
         files = {};
       let size = 0;
       for (const h of items) {
-        if (!/^[a-f0-9-]{36}\.png$/.test(h.filename))
+        if (!/^[a-f0-9-]{36}\.(png|webp)$/.test(h.filename))
           throw Error("图片路径无效");
         const data = await readFile(path.join(store.imagesDir, h.filename));
         size += data.length;
         if (size > 256 * 1024 * 1024)
           throw Error("本次下载超过 256 MB，请分批下载");
-        files[h.id + ".png"] = new Uint8Array(data);
+        files[h.filename] = new Uint8Array(data);
       }
       res.set("Content-Type", "application/zip");
       res.set(
@@ -1142,7 +1142,9 @@ export async function createApp({
             await stat(file);
             return;
           } catch {}
-          const source = path.join(store.imagesDir, id + ".png");
+          const item = store.state.history.find((h) => h.id === id);
+          if (!item || !/^[a-f0-9-]{36}\.(png|webp)$/.test(item.filename)) throw Error("作品不存在");
+          const source = path.join(store.imagesDir, item.filename);
           const data = await sharp(source)
             .resize({
               width: 480,
@@ -1177,7 +1179,7 @@ export async function createApp({
   app.use(
     "/media",
     (req, res, next) => {
-      if (!/^\/[a-f0-9-]{36}\.png$/.test(req.path)) return res.sendStatus(404);
+      if (!/^\/[a-f0-9-]{36}\.(png|webp)$/.test(req.path)) return res.sendStatus(404);
       next();
     },
     express.static(store.imagesDir, { dotfiles: "deny" }),
